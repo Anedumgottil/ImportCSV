@@ -181,6 +181,7 @@ int main(){
 			for (int j = 0; j < num_of_entities; j++){
 				did_change = changeValue(num_values[i], num_values[j], average, degreeStart);
 				changeMatrix(matrix, did_change, i, j);
+				displayBool(did_change);
 			}
 		}
 		//	Clears the vector of the previous data
