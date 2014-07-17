@@ -44,16 +44,15 @@ double computeAverage(vector<double> data){
 	and a flase if they are not.
 	Alpha is the average of the entire data
 
-	(1+i) * alpha
+	(1+i) * alpha	.99		1.01
 */
 bool changeValue(double county1, double county2,double alpha,double i){
 
 	if (county1 - (0.99) < county2){
-		if (county2 < county1 + (1.01)){
+		if (county2 < county1 + 1.01){
 			return true;
 		}
-		else
-			return false;
+		
 	}
 	else
 		return false;
@@ -107,7 +106,7 @@ int main(){
 	int num_of_entities;
 	bool did_change;
 
-	input_name = "DataTest";
+	input_name = "2005";
 	input_name_with_extention = input_name + string(".csv");
 	output_name = input_name + string("_Output.csv");
 	
@@ -181,7 +180,8 @@ int main(){
 			for (int j = 0; j < num_of_entities; j++){
 				did_change = changeValue(num_values[i], num_values[j], average, degreeStart);
 				changeMatrix(matrix, did_change, i, j);
-				displayBool(did_change);
+				//cout << i << " " << j << " "; 
+				//displayBool(did_change);
 			}
 		}
 		//	Clears the vector of the previous data
@@ -198,7 +198,11 @@ int main(){
 		degree.push_back(d);
 		
 		degreeStart += degreeChange;
-
+		for (int a = 0; a < num_of_entities; a++){
+			for (int b = 0; b < num_of_entities; b++){
+				matrix[a][b] = 0;
+			}
+		}
 
 	}
 	cout << "Done!" << endl;
