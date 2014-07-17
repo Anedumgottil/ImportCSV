@@ -48,12 +48,12 @@ Alpha is the average of the entire data
 */
 bool changeValue(double county1, double county2, double alpha, double i){
 
-	if (county1 - (0.99) < county2){
-		if (county2 < county1 + (1.01)){
+	if ((county1 - (0.99) < county2) && (county2 < county1 + (1.01))){
+		//if (county2 < county1 + (1.01)){
 			return true;
-		}
-		else
-			return false;
+		//}
+	//	else
+	//		return false;
 	}
 	else
 		return false;
@@ -136,10 +136,10 @@ int main(){
 	/*
 	//	Prints out what was read in
 	for (unsigned int i = 0; i<array.size(); i++){
-	for (unsigned int j = 0; j<array[i].size(); j++){
-	cout << array[i][j] << " "; // (separate fields by " ")
-	}
-	cout << endl;
+		for (unsigned int j = 0; j<array[i].size(); j++){
+			cout << array[i][j] << " "; // (separate fields by " ")
+		}
+		cout << endl;
 	}
 	*/
 	cout << "Reading file : " << input_name_with_extention << endl;
@@ -181,7 +181,7 @@ int main(){
 			for (int j = 0; j < num_of_entities; j++){
 				did_change = changeValue(num_values[i], num_values[j], average, degreeStart);
 				changeMatrix(matrix, did_change, i, j);
-				displayBool(did_change);
+				//displayBool(did_change);
 			}
 		}
 		//	Clears the vector of the previous data
@@ -221,6 +221,12 @@ int main(){
 				fout << degree[b][i] << ",";
 			}
 
+			fout << endl;
+		}
+		for (int i = 0; i < num_of_entities; i++){
+			for (int j = 0; j < num_of_entities; j++){
+				fout << matrix[i][j] << ",";
+			}
 			fout << endl;
 		}
 	}
