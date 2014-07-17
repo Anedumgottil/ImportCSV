@@ -21,12 +21,12 @@ using namespace std;
 void changeMatrix(int** &matrix, bool did_change, int county1, int county2){
 	if (did_change == true){
 		if (county1 != county2)
-			matrix[county2][county1] = 1;
+			matrix[county1][county2] = 1;
 		else
-			matrix[county2][county1] = 0;
+			matrix[county1][county2] = 0;
 	}
 	if (did_change == false)
-		matrix[county2][county1] = 0;
+		matrix[county1][county2] = 0;
 }
 /*
 	computeAverage: computes the average of the data by adding all the values within the vector
