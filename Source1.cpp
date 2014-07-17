@@ -226,7 +226,7 @@ int main(){
 		}
 		for (int a = 0; a < num_of_entities; a++){
 			for (int b = 0; b < num_of_entities; b++){
-				fout << matrix[a][b] << ",";
+				fout << matrix[b][a] << ",";
 			}
 			fout << endl;
 		}
