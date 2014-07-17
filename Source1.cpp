@@ -19,22 +19,26 @@ changeMatrix: Changes the matrix depending if the county is within a certain % o
 The value of the matrix will be changed to 1 if the boolean is true and it will remain a 0 if it is false
 */
 void changeMatrix(int** &matrix, bool did_change, int county1, int county2){
-/*
+
 	if (did_change == true){
-		if (county1 != county2)
+		if (county1 != county2){
 			matrix[county2][county1] = 1;
-		else
-			matrix[county2][county1] = 0;
+			matrix[county1][county2] = 1;
+			//cout << county1 << " " << county2<<endl;
+		}
+//		else
+//			matrix[county2][county1] = 0;
 	}
-	if (did_change == false)
-		matrix[county2][county1] = 0;
-*/
+//	if (did_change == false)
+//		matrix[county2][county1] = 0;
+/*
 	if ((did_change && (county1 != county2))){
-		matrix[county2][county1] = 1;
+		matrix[county2][county1] = 0;
 		matrix[county1][county2] = 1;
 	}
 	else
 		matrix[county2][county1] = 0;
+*/
 }
 /*
 computeAverage: computes the average of the data by adding all the values within the vector
@@ -51,12 +55,11 @@ double computeAverage(vector<double> data){
 changeValue: determines if the two counties are withing a certain % of eachother and returns a true if they are
 and a flase if they are not.
 Alpha is the average of the entire data
-
 (1+i) * alpha
 */
 bool changeValue(double county1, double county2, double alpha, double i){
 
-	if ((county1 - (0.99) < county2) && (county2 < county1 + (1.01))){
+	if ((county1 * (0.99) <= county2) && (county2 <= county1 * (1.01))){
 		//if (county2 < county1 + (1.01)){
 			return true;
 		//}
@@ -113,11 +116,11 @@ int main(){
 	vector<vector<int>> degree;
 	double average, degreeChange, degreeStart, degreeEnd;
 	int num_of_entities;
-	bool did_change;
+	bool did_change=true;
 
-	input_name = "DataTest";
+	input_name = "2005";
 	input_name_with_extention = input_name + string(".csv");
-	output_name = input_name + string("_Output1.csv");
+	output_name = input_name + string("_Output2.csv");
 
 	ifstream in(input_name_with_extention);
 
@@ -192,6 +195,9 @@ int main(){
 				//displayBool(did_change);
 			}
 		}
+		cout << num_values[1] << " vs " << num_values[0] << " ";
+		displayBool(changeValue(num_values[1], num_values[0], average, degreeStart));
+		cout << "Value :" <<matrix[1][0]<<endl;
 		//	Clears the vector of the previous data
 		d.clear();
 		cout << "Calcuating for " << degreeStart << endl;
