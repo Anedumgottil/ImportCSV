@@ -21,12 +21,12 @@ using namespace std;
 void changeMatrix(int** &matrix, bool did_change, int county1, int county2){
 	if (did_change == true){
 		if (county1 != county2)
-			matrix[county1][county2] = 1;
+			matrix[county2][county1] = 1;
 		else
-			matrix[county1][county2] = 0;
+			matrix[county2][county1] = 0;
 	}
 	if (did_change == false)
-		matrix[county1][county2] = 0;
+		matrix[county2][county1] = 0;
 }
 /*
 	computeAverage: computes the average of the data by adding all the values within the vector
@@ -185,6 +185,8 @@ int main(){
 				//displayBool(did_change);
 			}
 		}
+		cout << num_values[1] << " vs " << num_values[0];
+		displayBool(changeValue(num_values[1], num_values[0], average, degreeStart));
 		//	Clears the vector of the previous data
 		d.clear();
 		cout << "Calcuating for " << degreeStart << endl;
@@ -218,9 +220,9 @@ int main(){
 			for (unsigned int j = 0; j<array[i].size(); j++){
 				fout << array[i][j] << ",";
 			}
-		//	for (unsigned int b = 0; b < degree.size(); b++){
-		//		fout << degree[b][i] << ",";
-		//	}
+			for (unsigned int b = 0; b < degree.size(); b++){
+				fout << degree[b][i] << ",";
+			}
 			
 			fout << endl;
 		}
