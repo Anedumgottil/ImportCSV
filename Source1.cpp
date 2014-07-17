@@ -31,6 +31,7 @@ void changeMatrix(int** &matrix, bool did_change, int county1, int county2){
 */
 	if ((did_change && (county1 != county2))){
 		matrix[county2][county1] = 1;
+		matrix[county1][county2] = 1;
 	}
 	else
 		matrix[county2][county1] = 0;
