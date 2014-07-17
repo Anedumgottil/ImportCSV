@@ -19,6 +19,7 @@ changeMatrix: Changes the matrix depending if the county is within a certain % o
 The value of the matrix will be changed to 1 if the boolean is true and it will remain a 0 if it is false
 */
 void changeMatrix(int** &matrix, bool did_change, int county1, int county2){
+/*
 	if (did_change == true){
 		if (county1 != county2)
 			matrix[county2][county1] = 1;
@@ -26,6 +27,12 @@ void changeMatrix(int** &matrix, bool did_change, int county1, int county2){
 			matrix[county2][county1] = 0;
 	}
 	if (did_change == false)
+		matrix[county2][county1] = 0;
+*/
+	if ((did_change && (county1 != county2))){
+		matrix[county2][county1] = 1;
+	}
+	else
 		matrix[county2][county1] = 0;
 }
 /*
@@ -109,7 +116,7 @@ int main(){
 
 	input_name = "DataTest";
 	input_name_with_extention = input_name + string(".csv");
-	output_name = input_name + string("_Output.csv");
+	output_name = input_name + string("_Output1.csv");
 
 	ifstream in(input_name_with_extention);
 
@@ -171,7 +178,7 @@ int main(){
 	//Values for the starting and ending degree
 	degreeChange = 0.01;
 	degreeStart = 0.01;
-	degreeEnd = 0.1;
+	degreeEnd = 0.01;
 
 
 	cout << "Changing the matrix and caculating the degrees." << endl;
@@ -210,7 +217,7 @@ int main(){
 	if (fout.is_open()){
 		fout << "Name" << "," << "Value" << ",";
 		for (unsigned int a = 0; a < header.size(); a++){
-			fout << header[a];							//prints out the header
+			fout << header[a];			//prints out the header
 		}
 		fout << endl;
 		for (unsigned int i = 0; i<array.size(); i++){
