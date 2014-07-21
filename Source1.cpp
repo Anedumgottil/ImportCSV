@@ -122,21 +122,22 @@ int minDistance(int dist[], bool sptSet[], int num_of_entities)
 }
 
 // A utility function to print the constructed distance array
+/*
 int printSolution(int dist[], int num_of_entities)
 {
 	printf("Vertex   Distance from Source\n");
 	for (int i = 0; i < num_of_entities; i++)
 		printf("%d \t\t %d\n", i, dist[i]);
 }
-
+*/
 // Funtion that implements Dijkstra's single source shortest path algorithm
 // for a graph represented using adjacency matrix representation
-void dijkstra(int** matrix, int src, int num_of_entities)
+void dijkstra(int** matrix,int* &dist, int src, int num_of_entities)
 {
-	int dist[num_of_entities];     // The output array.  dist[i] will hold the shortest
+	//int* dist;     // The output array.  dist[i] will hold the shortest
 	// distance from src to i
 
-	bool sptSet[num_of_entities]; // sptSet[i] will true if vertex i is included in shortest
+	bool sptSet[3109]; // sptSet[i] will true if vertex i is included in shortest
 	// path tree or shortest distance from src to i is finalized
 
 	// Initialize all distances as INFINITE and stpSet[] as false
@@ -151,7 +152,7 @@ void dijkstra(int** matrix, int src, int num_of_entities)
 	{
 		// Pick the minimum distance vertex from the set of vertices not
 		// yet processed. u is always equal to src in first iteration.
-		int u = minDistance(dist, sptSet);
+		int u = minDistance(dist, sptSet,num_of_entities);
 
 		// Mark the picked vertex as processed
 		sptSet[u] = true;
@@ -162,13 +163,13 @@ void dijkstra(int** matrix, int src, int num_of_entities)
 			// Update dist[v] only if is not in sptSet, there is an edge from 
 			// u to v, and total weight of path from src to  v through u is 
 			// smaller than current value of dist[v]
-			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
-				&& dist[u] + graph[u][v] < dist[v])
-				dist[v] = dist[u] + graph[u][v];
+			if (!sptSet[v] && matrix[u][v] && dist[u] != INT_MAX
+				&& dist[u] + matrix[u][v] < dist[v])
+				dist[v] = dist[u] + matrix[u][v];
 	}
 
 	// print the constructed distance array
-	printSolution(dist, num_of_entities);
+	//printSolution(dist, num_of_entities);
 }
 
 int main(){
@@ -204,6 +205,7 @@ int main(){
 	num_of_entities = (short)array.size();
 	//	Creates a 2d array that has the size of the array
 	int** matrix = new int*[num_of_entities];
+	int* dist = new int(num_of_entities);
 
 	for (int i = 0; i < num_of_entities; i++){
 		matrix[i] = new int[num_of_entities];
@@ -280,6 +282,8 @@ int main(){
 
 	}
 	cout << "Done!" << endl;
+	
+	dijkstra(matrix, dist, 0, num_of_entities);
 
 	cout << "4)--------------------------------" << endl;
 	cout << "Writing the matrix to the output CSV file." << endl;
@@ -298,15 +302,11 @@ int main(){
 			for (unsigned int b = 0; b < degree.size(); b++){
 				fout << degree[b][i] << ",";
 			}
+			fout << endl;
+			
+			fout << dist[i];
+		}
 
-			fout << endl;
-		}
-		for (int i = 0; i < num_of_entities; i++){
-			for (int j = 0; j < num_of_entities; j++){
-				fout << matrix[i][j] << ",";
-			}
-			fout << endl;
-		}
 	}
 	cout << "Done!" << endl;
 	//displayMatrix(matrix, num_of_entities);
