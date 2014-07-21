@@ -109,8 +109,7 @@ void calculateDegree(int** matrix, vector<int> &degree, int num_of_entities){
 	}
 }
 
-int minDistance(int dist[], bool sptSet[], int num_of_entities)
-{
+int minDistance(int dist[], bool sptSet[], int num_of_entities){
 	// Initialize min value
 	int min = INT_MAX, min_index;
 
@@ -132,8 +131,7 @@ int printSolution(int dist[], int num_of_entities)
 */
 // Funtion that implements Dijkstra's single source shortest path algorithm
 // for a graph represented using adjacency matrix representation
-void dijkstra(int** matrix,int* &dist, int src, int num_of_entities)
-{
+void dijkstra(int** matrix,int* &dist, int src, int num_of_entities){
 	//int* dist;     // The output array.  dist[i] will hold the shortest
 	// distance from src to i
 
@@ -185,7 +183,7 @@ int main(){
 
 	input_name = "2005";
 	input_name_with_extention = input_name + string(".csv");
-	output_name = input_name + string("_Output2.csv");
+	output_name = input_name + string("_Output3.csv");
 
 	ifstream in(input_name_with_extention);
 
@@ -283,12 +281,13 @@ int main(){
 	}
 	cout << "Done!" << endl;
 	
-	dijkstra(matrix, dist, 0, num_of_entities);
+	//dijkstra(matrix, dist, 0, num_of_entities);
 
 	cout << "4)--------------------------------" << endl;
 	cout << "Writing the matrix to the output CSV file." << endl;
 
 	ofstream fout(output_name);
+	cout << "test";
 	if (fout.is_open()){
 		fout << "Name" << "," << "Value" << ",";
 		for (unsigned int a = 0; a < header.size(); a++){
@@ -304,7 +303,7 @@ int main(){
 			}
 			fout << endl;
 			
-			fout << dist[i];
+			//fout << dist[i];
 		}
 
 	}
