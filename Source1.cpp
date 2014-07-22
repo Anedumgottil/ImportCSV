@@ -4,7 +4,8 @@ Part of this code was taken from http://forums.codeguru.com/showthread.php?39645
 More documentation on vectors can be found here http://www.cplusplus.com/reference/vector/vector/
 
 ---------------------------------STUFF TO DO---------------------------------
-
+* Shortest Average Path
+* Allow the user to specify the file name, degreeStart, degreeEnd
 */
 #include <string>
 #include <sstream>
@@ -139,8 +140,11 @@ void dijkstra(int** matrix,int* &dist, int src, int num_of_entities){
 	// path tree or shortest distance from src to i is finalized
 
 	// Initialize all distances as INFINITE and stpSet[] as false
-	for (int i = 0; i < num_of_entities; i++)
-		dist[i] = INT_MAX, sptSet[i] = false;
+	for (int i = 0; i < num_of_entities; i++){
+		dist[i] = INT_MAX;
+		sptSet[i] = false;
+	}
+		
 
 	// Distance of source vertex from itself is always 0
 	dist[src] = 0;
@@ -172,7 +176,7 @@ void dijkstra(int** matrix,int* &dist, int src, int num_of_entities){
 
 int main(){
 	string line, field, input_name, input_name_with_extention, output_name;
-	vector< vector<string> > array;  // The 2D array
+	vector<vector<string>> array;  // The 2D array
 	vector<string> v, header;         // vector v : Array of values for one line only
 	vector<double> num_values;
 	vector<int> d;
@@ -281,7 +285,7 @@ int main(){
 	}
 	cout << "Done!" << endl;
 	
-	//dijkstra(matrix, dist, 0, num_of_entities);
+	dijkstra(matrix, dist, 0, num_of_entities);
 
 	cout << "4)--------------------------------" << endl;
 	cout << "Writing the matrix to the output CSV file." << endl;
