@@ -59,6 +59,8 @@ changeValue: determines if the two counties are withing a certain % of eachother
 and a flase if they are not.
 Alpha is the average of the entire data
 (1+i) * alpha
+0.99
+1.01
 */
 bool changeValue(double county1, double county2, double alpha, double i){
 
@@ -132,7 +134,7 @@ int printSolution(int dist[], int num_of_entities)
 */
 // Funtion that implements Dijkstra's single source shortest path algorithm
 // for a graph represented using adjacency matrix representation
-void dijkstra(int** matrix,int* &dist, int src, int num_of_entities){
+void dijkstra(int** matrix,int dist[], int src, int num_of_entities){
 	//int* dist;     // The output array.  dist[i] will hold the shortest
 	// distance from src to i
 
@@ -207,7 +209,7 @@ int main(){
 	num_of_entities = (short)array.size();
 	//	Creates a 2d array that has the size of the array
 	int** matrix = new int*[num_of_entities];
-	int* dist = new int(num_of_entities);
+	int dist[3109];
 
 	for (int i = 0; i < num_of_entities; i++){
 		matrix[i] = new int[num_of_entities];
@@ -263,9 +265,9 @@ int main(){
 				//displayBool(did_change);
 			}
 		}
-		cout << num_values[1] << " vs " << num_values[0] << " ";
-		displayBool(changeValue(num_values[1], num_values[0], average, degreeStart));
-		cout << "Value :" <<matrix[1][0]<<endl;
+//		cout << num_values[1] << " vs " << num_values[0] << " ";
+//		displayBool(changeValue(num_values[1], num_values[0], average, degreeStart));
+//		cout << "Value :" <<matrix[1][0]<<endl;
 		//	Clears the vector of the previous data
 		d.clear();
 		cout << "Calcuating for " << degreeStart << endl;
@@ -291,12 +293,13 @@ int main(){
 	cout << "Writing the matrix to the output CSV file." << endl;
 
 	ofstream fout(output_name);
-	cout << "test";
+	//cout << "test";
 	if (fout.is_open()){
 		fout << "Name" << "," << "Value" << ",";
 		for (unsigned int a = 0; a < header.size(); a++){
 			fout << header[a];			//prints out the header
 		}
+		fout << "Path" << ",";
 		fout << endl;
 		for (unsigned int i = 0; i<array.size(); i++){
 			for (unsigned int j = 0; j<array[i].size(); j++){
@@ -305,9 +308,11 @@ int main(){
 			for (unsigned int b = 0; b < degree.size(); b++){
 				fout << degree[b][i] << ",";
 			}
-			fout << endl;
+			//fout << endl;
 			
-			//fout << dist[i];
+			fout << dist[i] << ",";;
+
+			fout << endl;
 		}
 
 	}
@@ -315,7 +320,7 @@ int main(){
 	//displayMatrix(matrix, num_of_entities);
 
 	cout << "Saved file as : " << output_name << endl;
-
+	
 	//Pauses the command prompt on windows so the program does not exit imideatly 
 	system("pause");
 
