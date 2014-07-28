@@ -15,7 +15,6 @@ More documentation on vectors can be found here http://www.cplusplus.com/referen
 #include <numeric>
 #include <climits>
 
-#define V 9
 using namespace std;
 /*
 changeMatrix: Changes the matrix depending if the county is within a certain % of eachother
@@ -65,11 +64,7 @@ Alpha is the average of the entire data
 bool changeValue(double county1, double county2, double alpha, double i){
 
 	if ((county1 * (0.99) <= county2) && (county2 <= county1 * (1.01))){
-		//if (county2 < county1 + (1.01)){
 			return true;
-		//}
-	//	else
-	//		return false;
 	}
 	else
 		return false;
@@ -123,63 +118,56 @@ int minDistance(int dist[], bool sptSet[], int num_of_entities){
 	return min_index;
 }
 
-// A utility function to print the constructed distance array
-/*
-int printSolution(int dist[], int num_of_entities)
-{
-	printf("Vertex   Distance from Source\n");
-	for (int i = 0; i < num_of_entities; i++)
-		printf("%d \t\t %d\n", i, dist[i]);
-}
-*/
-// Funtion that implements Dijkstra's single source shortest path algorithm
-// for a graph represented using adjacency matrix representation
+
+//	Funtion that implements Dijkstra's single source shortest path algorithm
+//	for a graph represented using adjacency matrix representation
 void dijkstra(int** matrix,int dist[], int src, int num_of_entities){
-	//int* dist;     // The output array.  dist[i] will hold the shortest
-	// distance from src to i
+	//int* dist;     //	The output array.  dist[i] will hold the shortest
+	//	distance from src to i
 
-	bool sptSet[3109]; // sptSet[i] will true if vertex i is included in shortest
-	// path tree or shortest distance from src to i is finalized
+	bool sptSet[3109]; //	sptSet[i] will true if vertex i is included in shortest
+					  //	path tree or shortest distance from src to i is finalized
 
-	// Initialize all distances as INFINITE and stpSet[] as false
+	//	Initialize all distances as INFINITE and stpSet[] as false
 	for (int i = 0; i < num_of_entities; i++){
 		dist[i] = INT_MAX;
 		sptSet[i] = false;
 	}
-		
 
-	// Distance of source vertex from itself is always 0
+	//	Distance of source vertex from itself is always 0
 	dist[src] = 0;
 
-	// Find shortest path for all vertices
+	//	Find shortest path for all vertices
 	for (int count = 0; count < num_of_entities - 1; count++)
 	{
-		// Pick the minimum distance vertex from the set of vertices not
-		// yet processed. u is always equal to src in first iteration.
+		//	Pick the minimum distance vertex from the set of vertices not
+		//	yet processed. u is always equal to src in first iteration.
 		int u = minDistance(dist, sptSet,num_of_entities);
 
-		// Mark the picked vertex as processed
+		//	Mark the picked vertex as processed
 		sptSet[u] = true;
 
-		// Update dist value of the adjacent vertices of the picked vertex.
-		for (int v = 0; v < num_of_entities; v++)
-
-			// Update dist[v] only if is not in sptSet, there is an edge from 
-			// u to v, and total weight of path from src to  v through u is 
-			// smaller than current value of dist[v]
+		//	Update dist value of the adjacent vertices of the picked vertex.
+		for (int v = 0; v < num_of_entities; v++){
+			//	Update dist[v] only if is not in sptSet, there is an edge from 
+			//	u to v, and total weight of path from src to  v through u is 
+			//	smaller than current value of dist[v]
 			if (!sptSet[v] && matrix[u][v] && dist[u] != INT_MAX
 				&& dist[u] + matrix[u][v] < dist[v])
 				dist[v] = dist[u] + matrix[u][v];
+		}
 	}
-
-	// print the constructed distance array
-	//printSolution(dist, num_of_entities);
+	for (int q = 0; q < num_of_entities; q++){
+		if (dist[q] == INT_MAX)
+			dist[q] = 0;
+	}
 }
+
 
 int main(){
 	string line, field, input_name, input_name_with_extention, output_name;
 	vector<vector<string>> array;  // The 2D array
-	vector<string> v, header;         // vector v : Array of values for one line only
+	vector<string> v, header;      // vector v : Array of values for one line only
 	vector<double> num_values;
 	vector<int> d;
 	vector<vector<int>> degree;
@@ -261,13 +249,10 @@ int main(){
 		for (int i = 0; i< num_of_entities; i++){
 			for (int j = 0; j < num_of_entities; j++){
 				did_change = changeValue(num_values[i], num_values[j], average, degreeStart);
-				changeMatrix(matrix, did_change, i, j);
-				//displayBool(did_change);
+				changeMatrix(matrix, did_change, i, j);		
 			}
 		}
-//		cout << num_values[1] << " vs " << num_values[0] << " ";
-//		displayBool(changeValue(num_values[1], num_values[0], average, degreeStart));
-//		cout << "Value :" <<matrix[1][0]<<endl;
+
 		//	Clears the vector of the previous data
 		d.clear();
 		cout << "Calcuating for " << degreeStart << endl;
@@ -282,18 +267,26 @@ int main(){
 		degree.push_back(d);
 
 		degreeStart += degreeChange;
-
-
 	}
+
 	cout << "Done!" << endl;
 	
 	dijkstra(matrix, dist, 0, num_of_entities);
+	
+	double avg_path = 0;
+	
+	for (int q = 0; q < num_of_entities; q++){
+		avg_path += dist[q];
+	}
+	
+	avg_path = avg_path / num_of_entities;
 
+	cout << "Average Path is " << avg_path << endl;
 	cout << "4)--------------------------------" << endl;
 	cout << "Writing the matrix to the output CSV file." << endl;
 
 	ofstream fout(output_name);
-	//cout << "test";
+	
 	if (fout.is_open()){
 		fout << "Name" << "," << "Value" << ",";
 		for (unsigned int a = 0; a < header.size(); a++){
@@ -308,13 +301,10 @@ int main(){
 			for (unsigned int b = 0; b < degree.size(); b++){
 				fout << degree[b][i] << ",";
 			}
-			//fout << endl;
-			
 			fout << dist[i] << ",";;
 
 			fout << endl;
 		}
-
 	}
 	cout << "Done!" << endl;
 	//displayMatrix(matrix, num_of_entities);
