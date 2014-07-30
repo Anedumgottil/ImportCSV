@@ -157,6 +157,7 @@ void dijkstra(int** matrix,int dist[], int src, int num_of_entities){
 				dist[v] = dist[u] + matrix[u][v];
 		}
 	}
+	//	Replaces infinty(INT_MAX) with 0 showing that there is no shortest path
 	for (int q = 0; q < num_of_entities; q++){
 		if (dist[q] == INT_MAX)
 			dist[q] = 0;
@@ -188,7 +189,7 @@ int main(){
 
 		while (getline(ss, field, ','))  //	Break line  into comma delimitted fields
 		{
-			v.push_back(field);  //	Add each field to the 1D array
+	 		v.push_back(field);  //	Add each field to the 1D array
 		}
 		array.push_back(v);  //	Add the 1D array to the 2D array
 	}
