@@ -1,7 +1,7 @@
 /*
 Author: Anthony Nedumgottil - anedum2@uic.edu
 Part of this code was taken from http://forums.codeguru.com/showthread.php?396459-Reading-CSV-file-into-an-array
-More documentation on vectors can be found here http://www.cplusplus.com/reference/vector/vector/
+More documentation on vectors can be found here http://www.cplusplus.com/reference/vector/vector/  
 
 ---------------------------------STUFF TO DO---------------------------------
 * Shortest Average Path
@@ -176,7 +176,9 @@ int main(){
 	int num_of_entities;
 	bool did_change=true;
 
-	input_name = "2005";
+	//input_name = "2005";
+	cout << "Please specify the name of the file(excluding the extention) "<< endl;
+	cin >> input_name;
 	input_name_with_extention = input_name + string(".csv");
 	output_name = input_name + string("_Output3.csv");
 
