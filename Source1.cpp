@@ -27,21 +27,8 @@ void changeMatrix(int** &matrix, bool did_change, int county1, int county2){
 		if (county1 != county2){
 			matrix[county2][county1] = 1;
 			matrix[county1][county2] = 1;
-			//cout << county1 << " " << county2<<endl;
 		}
-//		else
-//			matrix[county2][county1] = 0;
 	}
-//	if (did_change == false)
-//		matrix[county2][county1] = 0;
-/*
-	if ((did_change && (county1 != county2))){
-		matrix[county2][county1] = 0;
-		matrix[county1][county2] = 1;
-	}
-	else
-		matrix[county2][county1] = 0;
-*/
 }
 /*
 computeAverage: computes the average of the data by adding all the values within the vector
@@ -126,9 +113,10 @@ void dijkstra(int** matrix,int dist[], int src, int num_of_entities){
 	//int* dist;     //	The output array.  dist[i] will hold the shortest
 	//	distance from src to i
 
-	bool sptSet[3109]; //	sptSet[i] will true if vertex i is included in shortest
-					  //	path tree or shortest distance from src to i is finalized
-
+	//	sptSet[i] will true if vertex i is included in shortest
+	//	path tree or shortest distance from src to i is finalized
+	bool * sptSet = new (nothrow) bool[num_of_entities];;
+	
 	//	Initialize all distances as INFINITE and stpSet[] as false
 	for (int i = 0; i < num_of_entities; i++){
 		dist[i] = INT_MAX;
@@ -187,7 +175,7 @@ int main(){
 	cin >> input_name;
 	
 	input_name_with_extention = input_name + string(".csv");
-	output_name = input_name + string("_Output4.csv");
+	output_name = input_name + string("_Output5.csv");
 
 	cout << "Please enter in the starting degree as a decimal point." << endl;
 	cin >> degree_start;
@@ -217,20 +205,14 @@ int main(){
 	num_of_entities = (short)array.size();
 	//	Creates a 2d array that has the size of the array
 	int** matrix = new int*[num_of_entities];
-	int dist[3109];
-
+	
+	int* dist;
+	dist = new (nothrow) int[num_of_entities];
+	
 	for (int i = 0; i < num_of_entities; i++){
 		matrix[i] = new int[num_of_entities];
 	}
-	/*
-	//	Prints out what was read in
-	for (unsigned int i = 0; i<array.size(); i++){
-		for (unsigned int j = 0; j<array[i].size(); j++){
-			cout << array[i][j] << " "; // (separate fields by " ")
-		}
-		cout << endl;
-	}
-	*/
+
 	cout << "Reading file : " << input_name_with_extention << endl;
 
 	cout << "1)--------------------------------" << endl;
@@ -259,8 +241,6 @@ int main(){
 
 	//Values for the starting and ending degree
 	
-	
-
 	cout << "Changing the matrix and caculating the degrees." << endl;
 	while (degree_start <= degree_end){
 
@@ -284,7 +264,6 @@ int main(){
 		//	Adds the values of Vector d to the Multidimentional Vector degree
 		degree.push_back(d);
 
-		degree_sum += degree_start;
 		degree_start += degree_change;
 	}
 
@@ -303,16 +282,15 @@ int main(){
 		if (dist[z]>avg_max)
 			avg_max = dist[z];
 	}
+	for (unsigned int i = 0; i < array.size(); i++){
+		for (unsigned int b = 0; b < degree.size(); b++){
+			degree_sum += degree[b][i];
+		}
+	}
 	avg_path = avg_path / num_of_entities;
 	double density;
 
 	density = degree_sum / (num_of_entities * (num_of_entities - 1));
-	
-	//avg_max =(int) max_element(dist, dist + 3109);
-	
-	cout << "Average Path is " << avg_path << endl;
-	cout << "Diameter is " << avg_max << endl;
-	cout << "Density is " << density << endl;
 
 	cout << "4)--------------------------------" << endl;
 	cout << "Writing the matrix to the output CSV file." << endl;
@@ -325,7 +303,11 @@ int main(){
 			fout << header[a];			//prints out the header
 		}
 		fout << "Path" << ",";
+		fout << "Avg Path" << ",";
+		fout << "Diameter " << ",";
+		fout << "Density" << ",";
 		fout << endl;
+		
 		for (unsigned int i = 0; i<array.size(); i++){
 			for (unsigned int j = 0; j<array[i].size(); j++){
 				fout << array[i][j] << ",";
@@ -333,10 +315,19 @@ int main(){
 			for (unsigned int b = 0; b < degree.size(); b++){
 				fout << degree[b][i] << ",";
 			}
-			fout << dist[i] << ",";;
+			fout << dist[i] << ",";
+			if (i == 0){
+				fout << avg_path << ",";
+				fout << avg_max << ",";
+				fout << density << ",";
+
+			}
 
 			fout << endl;
 		}
+		
+		
+		fout << endl;
 	}
 	cout << "Done!" << endl;
 	//displayMatrix(matrix, num_of_entities);
