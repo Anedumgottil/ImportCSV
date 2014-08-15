@@ -4,8 +4,8 @@ Part of this code was taken from http://forums.codeguru.com/showthread.php?39645
 More documentation on vectors can be found here http://www.cplusplus.com/reference/vector/vector/  
 
 ---------------------------------STUFF TO DO---------------------------------
-* Shortest Average Path
-* Allow the user to specify the file name, degreeStart, degreeEnd
+* Density
+* Diameter 
 */
 #include <string>
 #include <sstream>
@@ -14,6 +14,7 @@ More documentation on vectors can be found here http://www.cplusplus.com/referen
 #include <fstream>
 #include <numeric>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 /*
@@ -63,7 +64,7 @@ Alpha is the average of the entire data
 */
 bool changeValue(double county1, double county2, double alpha, double i){
 
-	if ((county1 * (0.99) <= county2) && (county2 <= county1 * (1.01))){
+	if (((county1 - i * alpha)  <= county2) && (county2 <= (county1 + i * alpha))){
 			return true;
 	}
 	else
@@ -151,7 +152,7 @@ void dijkstra(int** matrix,int dist[], int src, int num_of_entities){
 		for (int v = 0; v < num_of_entities; v++){
 			//	Update dist[v] only if is not in sptSet, there is an edge from 
 			//	u to v, and total weight of path from src to  v through u is 
-			//	smaller than current value of dist[v]
+			//	smaller than current value of dist[v] 
 			if (!sptSet[v] && matrix[u][v] && dist[u] != INT_MAX
 				&& dist[u] + matrix[u][v] < dist[v])
 				dist[v] = dist[u] + matrix[u][v];
@@ -166,21 +167,37 @@ void dijkstra(int** matrix,int dist[], int src, int num_of_entities){
 
 
 int main(){
+
 	string line, field, input_name, input_name_with_extention, output_name;
 	vector<vector<string>> array;  // The 2D array
 	vector<string> v, header;      // vector v : Array of values for one line only
 	vector<double> num_values;
 	vector<int> d;
 	vector<vector<int>> degree;
-	double average, degreeChange, degreeStart, degreeEnd;
+	double average, degree_change, degree_start, degree_end, degree_sum;
 	int num_of_entities;
 	bool did_change=true;
 
-	//input_name = "2005";
-	cout << "Please specify the name of the file(excluding the extention) "<< endl;
+	degree_change = 0;
+	degree_start = 0;
+	degree_end = 0;
+	degree_sum = 0;
+	
+	cout << "Please specify the name of the file(excluding the extention). "<< endl;
 	cin >> input_name;
+	
 	input_name_with_extention = input_name + string(".csv");
-	output_name = input_name + string("_Output3.csv");
+	output_name = input_name + string("_Output4.csv");
+
+	cout << "Please enter in the starting degree as a decimal point." << endl;
+	cin >> degree_start;
+
+	cout << "Please enter in the percentage to incriment by as a decimal point." << endl;
+	cin >> degree_change;
+
+	cout << "Please enter in the ending degree as a decimal point." << endl;
+	cin >> degree_end;
+
 
 	ifstream in(input_name_with_extention);
 
@@ -241,35 +258,34 @@ int main(){
 	cout << "3)--------------------------------" << endl;
 
 	//Values for the starting and ending degree
-	degreeChange = 0.01;
-	degreeStart = 0.01;
-	degreeEnd = 0.01;
-
+	
+	
 
 	cout << "Changing the matrix and caculating the degrees." << endl;
-	while (degreeStart <= degreeEnd){
+	while (degree_start <= degree_end){
 
 		for (int i = 0; i< num_of_entities; i++){
 			for (int j = 0; j < num_of_entities; j++){
-				did_change = changeValue(num_values[i], num_values[j], average, degreeStart);
+				did_change = changeValue(num_values[i], num_values[j], average, degree_start);
 				changeMatrix(matrix, did_change, i, j);		
 			}
 		}
 
 		//	Clears the vector of the previous data
 		d.clear();
-		cout << "Calcuating for " << degreeStart << endl;
+		cout << "Calcuating for " << degree_start << endl;
 		//	Calculates the degree and stores in in Vector d
 		calculateDegree(matrix, d, num_of_entities);
 
 		//	Adds the number of degrees to the header of the output csv file
-		header.push_back("Degree " + to_string(degreeStart));
+		header.push_back("Degree " + to_string(degree_start));
 		header.push_back(",");
 
 		//	Adds the values of Vector d to the Multidimentional Vector degree
 		degree.push_back(d);
 
-		degreeStart += degreeChange;
+		degree_sum += degree_start;
+		degree_start += degree_change;
 	}
 
 	cout << "Done!" << endl;
@@ -277,14 +293,27 @@ int main(){
 	dijkstra(matrix, dist, 0, num_of_entities);
 	
 	double avg_path = 0;
+	int avg_max = 0;
 	
 	for (int q = 0; q < num_of_entities; q++){
 		avg_path += dist[q];
 	}
 	
+	for (int z = 0; z < num_of_entities; z++){
+		if (dist[z]>avg_max)
+			avg_max = dist[z];
+	}
 	avg_path = avg_path / num_of_entities;
+	double density;
 
+	density = degree_sum / (num_of_entities * (num_of_entities - 1));
+	
+	//avg_max =(int) max_element(dist, dist + 3109);
+	
 	cout << "Average Path is " << avg_path << endl;
+	cout << "Diameter is " << avg_max << endl;
+	cout << "Density is " << density << endl;
+
 	cout << "4)--------------------------------" << endl;
 	cout << "Writing the matrix to the output CSV file." << endl;
 
